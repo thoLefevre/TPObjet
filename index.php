@@ -17,20 +17,24 @@
     
     
     <?php
-    $U1 =new User("toto","12345");
-    $U2=new User("tata","azerty");
-    $U3=new User("tete","azer");
-    $U4=new User("titi","aaaa");
-    $U5=new User("tutu","bbbb");
+      $TableauUser = array();
+      try {
+          
 
-    $TableauUser = array();
+          $bdd = new PDO('mysql:host=192.168.65.47;dbname=User', 'UserWEB', 'UserWEB');
+          $req = "SELECT * from User";
+          $reponses = $bdd->query($req);
+          while ($donnees = $reponses->fetch())
+          {
+              echo '<p>' .$donnees['id']  . "  ". $donnees['login'] . "  ". $donnees['mdp'] . '</p>';
+              array_push($TableauUser,new User($donnees['id'],$donnees['login'],$donnees['mdp']));
+          } 
 
-        array_push($TableauUser,$U1);
-        array_push($TableauUser,$U2);
-        array_push($TableauUser,$U3);
-        array_push($TableauUser,$U4);
-        array_push($TableauUser,$U5);
-       
+      } catch (Exception $e) {
+          echo 'Exception reçue : ',  $e->getMessage(), "\n";
+      }
+      
+
         if(isset($_POST["connexion"])){
         $trouve = false;
         foreach ($TableauUser as  $TheUser)
